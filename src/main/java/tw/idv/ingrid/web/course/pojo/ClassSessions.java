@@ -1,0 +1,48 @@
+package tw.idv.ingrid.web.course.pojo;
+
+import java.sql.Timestamp;
+import java.util.Date;
+
+
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Entity
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "CLASS_SESSIONS")
+public class ClassSessions {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "SESSION_ID")
+	private Integer sessionId;
+	@Column(name = "COURSE_ID")
+	private Integer courseId;
+	@Column(name = "SESSION_DATE")
+	private Date sessionDate; 
+	@Column(name = "TIME_SLOT")
+	private Integer timeSlot;
+	@Column(name = "CHECKIN_AT")
+	@JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss", timezone = "GMT+8")
+	private Timestamp checkinAt;
+	@Column(name = "CHECKIN_OUT")
+	@JsonFormat(pattern = "yyyy/MM/dd HH:mm:ss", timezone = "GMT+8")
+	private Timestamp checkinOut;
+	
+	@Transient
+	private String bookStatus; // 用來回應前端，判斷使用者的預約狀態
+							   // "已預約"、"可預約"、"無法預約"(預設）
+	@Transient
+	private Integer userCnt; // 此班次總預約人數，回應前端用
+	
+	@Transient
+	private String chkSelect; // 上下課打卡判斷，"AT"、"OUT"
+}
